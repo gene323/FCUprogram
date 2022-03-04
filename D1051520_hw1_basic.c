@@ -4,6 +4,7 @@
 
 #define CARDS 52
 #define FACES 13
+#define SUITS 4
 #define HANDS 5 //the cards you hold
 
 // card structure definition
@@ -51,6 +52,7 @@ int main( void ){
     twoPair(hand, face);
     threeOfKind(hand);
     fourOfKind(hand);
+    flushHand(hand);
 } // end main
 
 // place strings into Card structures
@@ -123,13 +125,16 @@ void twoPair( const Card * const hand , const char * wFace[]){
     unsigned int counter[ FACES ] = { 0 };
 
     size_t i;
-    int isTwo;//judge whether hold twopair
+    int isTwo = 0;//judge whether hold twopair
     for(i=0; i<HANDS; i++){
         counter[ hand[i].face_num ] ++;
-        if(counter[ hand[i].face_num ] == 2)
-            isTwo ++;
     }
 
+    for(i=0; i<FACES; i++){
+        if(counter[ i ] == 2){
+            isTwo ++;
+        }
+    }
     if(isTwo == 2){
         printf("The hand contains two pair cards\n");
     }
@@ -160,3 +165,17 @@ void fourOfKind( const Card * const hand ){
         }
     }
 }//end fourofkind function
+
+void flushHand( const Card * const hand ){
+
+    unsigned int counter[ SUITS ] = { 0 };
+    size_t i;
+
+    for(i=0; i<HANDS; i++){
+        counter[ hand[i].suit_num ] ++;
+
+        if(counter[ hand[i].suit_num ] == 5)
+            printf("The hand contains flushhand %s!!\n", hand[i].suit);
+    }
+
+}
