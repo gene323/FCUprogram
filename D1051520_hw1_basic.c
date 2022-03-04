@@ -50,6 +50,7 @@ int main( void ){
     onePair(hand,face);
     twoPair(hand, face);
     threeOfKind(hand);
+    fourOfKind(hand);
 } // end main
 
 // place strings into Card structures
@@ -140,7 +141,22 @@ void threeOfKind( const Card * const hand ){
     for(i=0; i<HANDS; i++){
         counter[ hand[i].face_num ] ++;
         if(counter[ hand[i].face_num ] == 3){
-            printf("The hand contains threeofkind of %s\n ", hand[i].face);
+            printf("The hand contains threeofkind of %s\n", hand[i].face);
         }
     }
-}
+}//end threeofkind function
+
+
+void fourOfKind( const Card * const hand ){
+
+    unsigned int counter[ FACES ] = { 0 };
+    size_t i;
+
+    for(i=0; i<HANDS; i++){
+        counter[ hand[i].face_num ] ++;
+
+        if(counter[ hand[i].face_num ] == 4){
+            printf("The hand contains fourofkind of %s\n", hand[i].face);
+        }
+    }
+}//end fourofkind function
