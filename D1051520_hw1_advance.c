@@ -27,10 +27,10 @@ void onePair( const Card * const hand , const char * wFace[]); //對子
 void twoPair( const Card * const hand , const char * wFace[]); //雙對子
 void threeOfKind( const Card * const hand ); //三條 
 void fourOfKind( const Card * const hand ); //四梅 
-void straightHand( const Card * const hand ); //順子 
-void flushHand( const Card * const hand );//同花
+void straightHand( const Card * const hand, const char * wFace[]); //順子 
+void flushHand( const Card * const hand);//同花
 
-int main( void ){
+int main(){
  
     Card deck[ CARDS ]; // define array of Cards
     Card hand[ HANDS ]; 
@@ -45,13 +45,15 @@ int main( void ){
 
     srand( time( NULL ) ); // randomize
 
-    fillDeck( deck, face, suit ); // load the deck with Cards
-    shuffle( deck ); // put Cards in random order
-    deal( deck,hand ); // deal all 52 Cards
-    onePair(hand,face);
+    fillDeck(deck, face, suit); // load the deck with Cards
+    shuffle(deck); // put Cards in random order
+    deal(deck,hand); // deal all 52 Cards
+    onePair(hand, face);
     twoPair(hand, face);
     threeOfKind(hand);
     fourOfKind(hand);
+    flushHand(hand);
+    straightHand(hand, face);
 } // end main
 
 // place strings into Card structures
@@ -159,8 +161,53 @@ void fourOfKind( const Card * const hand ){
     for(i=0; i<HANDS; i++){
         counter[ hand[i].face_num ] ++;
 
-        if(counter[ hand[i].face_num ] == 5){
+        if(counter[ hand[i].face_num ] == 4){
             printf("The hand contains fourofkind of %s\n", hand[i].face);
         }
     }
 }//end fourofkind function
+
+void flushHand( const Card * const hand ){
+
+    unsigned int counter[ SUITS ] = { 0 };
+    size_t i;
+
+    for(i=0; i<HANDS; i++){
+        counter[ hand[i].suit_num ] ++;
+
+        if(counter[ hand[i].suit_num ] == 5)
+            printf("The hand contains flushhand %s!!\n", hand[i].suit);
+    }
+
+}
+
+void straightHand( const Card * const hand , const char * wFace[]){
+
+    unsigned int counter[ FACES ] = { 0 };
+    size_t i;
+
+    for(i=0; i<HANDS; i++){
+        counter[ hand[i].face_num ] ++;
+        
+        if(counter[ hand[i].face_num ] == 2){
+            return ;
+        }
+    }
+
+    for(i=0; i<FACES-4; i++){
+
+        if(counter[ i ] != 0){
+            if(counter[i]+counter[i+1]+counter[i+2]+
+            counter[i+3]+counter[i+4] == 5){
+                
+                printf("The hand contains straightHand %s to %s", wFace[ i ], wFace[ i+4 ]);
+                return ;
+            }
+        }
+    }
+    if(counter[ 9 ] + counter[ 10 ] + counter[ 11 ] 
+     + counter[ 12 ] + counter[ 0 ] == 5){
+
+        printf("The hand contains straighHand %s to %s", wFace[ 9 ], wFace[ 0 ]);
+    }
+}
