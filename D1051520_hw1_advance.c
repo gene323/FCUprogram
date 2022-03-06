@@ -29,6 +29,8 @@ void threeOfKind( const Card * const hand ); //三條
 void fourOfKind( const Card * const hand ); //四梅 
 void straightHand( const Card * const hand, const char * wFace[]); //順子 
 void flushHand( const Card * const hand);//同花
+void red();
+void reset();
 
 int main(){
  
@@ -117,7 +119,10 @@ void onePair( const Card * const hand, const char * wFace[] ){
     // print result if there is a pair
     for ( p = 0; p < FACES; ++p ){
         if(counter[ p ] == 2){ 
-            printf( "The hand contains a pair of %ss.\n", wFace[ p ] );
+            printf( "The hand contains a pair of ");
+            red();
+            printf("%ss\n", wFace[ p ]);
+            reset();
         }
     }
 } // end function pair
@@ -147,11 +152,13 @@ void threeOfKind( const Card * const hand ){
     for(i=0; i<HANDS; i++){
         counter[ hand[i].face_num ] ++;
         if(counter[ hand[i].face_num ] == 3){
-            printf("The hand contains threeofkind of %s\n", hand[i].face);
+            printf("The hand contains threeofkind of ");
+            red();
+            printf("%s\n", hand[i].face);
+            reset();
         }
     }
 }//end threeofkind function
-
 
 void fourOfKind( const Card * const hand ){
 
@@ -162,7 +169,10 @@ void fourOfKind( const Card * const hand ){
         counter[ hand[i].face_num ] ++;
 
         if(counter[ hand[i].face_num ] == 4){
-            printf("The hand contains fourofkind of %s\n", hand[i].face);
+            printf("The hand contains fourofkind of ");
+            red();
+            printf("%s\n", hand[i].face);
+            reset();
         }
     }
 }//end fourofkind function
@@ -175,8 +185,12 @@ void flushHand( const Card * const hand ){
     for(i=0; i<HANDS; i++){
         counter[ hand[i].suit_num ] ++;
 
-        if(counter[ hand[i].suit_num ] == 5)
-            printf("The hand contains flushhand %s!!\n", hand[i].suit);
+        if(counter[ hand[i].suit_num ] == 5){
+            printf("The hand contains flushhand of ");
+            red();
+            printf("%s !! \n", hand[i].suit);
+            reset();
+        }
     }
 
 }
@@ -210,4 +224,12 @@ void straightHand( const Card * const hand , const char * wFace[]){
 
         printf("The hand contains straighHand %s to %s", wFace[ 9 ], wFace[ 0 ]);
     }
+}
+
+void red(){
+    printf("\033[1;31m");
+}
+
+void reset(){
+    printf("\033[0m");
 }
