@@ -63,7 +63,7 @@ void shuffle(Card * const wDeck){
     // loop through wDeck randomly swapping Cards
     for (size_t i = 0; i < CARDS; ++i) { 
         tmp = wDeck[i];
-        numRand = rand() % (CARDS - i );
+        numRand = rand() % (CARDS - i ) + i;
         wDeck[i] = wDeck[numRand];
         wDeck[numRand] = tmp;
     }
