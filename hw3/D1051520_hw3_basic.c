@@ -4,19 +4,16 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-typedef struct Vocabulary{
+struct Vocabulary{
     bool flag;
     char voc[6];
     struct Vocabulary *nextVoc;
-}Vocabulary;
-
-FILE *history;
-FILE *words;
+};
+typedef struct Vocabulary Vocabulary;
 
 void isFileOpen(char *path);
-int countVoc(FILE *fp);
-bool isExistVoc(FILE *sourcefp, char str[]);
-Vocabulary* fillVoc(FILE *sourcefp, const int COUNT);
+bool isExistVoc(FILE *historyfp, char str[]);
+void fillVoc(FILE *historyfp, FILE *wordsfp, Vocabulary **headVoc);
 void lowerString(char str[]);
 void printVoc(Vocabulary *headVoc, Vocabulary *curVoc);
 void searchVoc(char guessStr[], char resultStr[], Vocabulary **headVoc,
@@ -32,28 +29,10 @@ int main(){
     FILE *words = fopen("words.txt", "r");
 
     Vocabulary *headVoc, *curVoc, *tailVoc;
-    const int COUNT = countVoc(words);
 
-    fseek(words, 0, SEEK_SET);
-    char str[6];
-    for(int i=0; i<COUNT; i++){
-        curVoc = (Vocabulary*) malloc(sizeof(Vocabulary));
-        fscanf(words, "%s", str);
-
-        //define value
-        curVoc->flag = isExistVoc(history, str);
-        strcpy(curVoc->voc, str);
-
-        if(i == 0){
-            headVoc = curVoc;
-        }
-        else
-            tailVoc->nextVoc = curVoc;
-        curVoc->nextVoc = NULL;
-        tailVoc = curVoc;
-    }
-
+    fillVoc(history,words, &headVoc);
     printVoc(headVoc, curVoc);
+
     char guessStr[6];
     char resultStr[6];
     do{
@@ -69,12 +48,7 @@ int main(){
     }while(strcmp(guessStr, "ggggg") && strcmp(resultStr, "ggggg"));
 
 
-    curVoc = headVoc;
-    while(curVoc != NULL){
-        tailVoc = curVoc;
-        curVoc = curVoc->nextVoc;
-        free(tailVoc);
-    }
+    freeVoc(&headVoc, &curVoc, &tailVoc);
     return 0;
 }//end main func
 
@@ -88,50 +62,39 @@ void isFileOpen(char *path){
     puts("");
 }//end isFileOpen func
 
-bool isExistVoc(FILE *sourcefp, char str[]){
+bool isExistVoc(FILE *historyfp, char str[]){
 
-    fseek(sourcefp, 17, SEEK_SET);
+    fseek(historyfp, 17, SEEK_SET);
     char targetStr[6];
-    while(fscanf(sourcefp, "%*s %*s %s", targetStr) != EOF){
+    while(fscanf(historyfp, "%*s %*s %s", targetStr) != EOF){
         lowerString(targetStr);
         if(strcmp(targetStr, str) == 0){ return true; }
     }
     return false;
 }//end isExistVoc func
 
+void fillVoc(FILE *historyfp, FILE *wordsfp, Vocabulary **headVoc){
 
-int countVoc(FILE *fp){
-    int count = 0;
-    while(fscanf(fp, "%*s") != EOF){
-        ++count;
-    }
-    fseek(fp, 0, SEEK_SET);
-    return count;
-}//end countVoc func
-
-Vocabulary* fillVoc(FILE *sourcefp, const int COUNT){
-
-    fseek(sourcefp, 0, SEEK_SET);
+    fseek(wordsfp, 0, SEEK_SET);
+    Vocabulary *tempVoc, *tailVoc;
     char str[6];
-    Vocabulary *firstVoc, *curVoc, *tailVoc;
+    bool judge = 1;
+    while(fscanf(wordsfp, "%s", str) != EOF){
+        tempVoc = (Vocabulary*) malloc(sizeof(Vocabulary));
 
-    for(int i=0; i<COUNT; i++){
-        curVoc = (Vocabulary*) malloc(sizeof(Vocabulary));
-        fscanf(sourcefp, "%s", str);
+        //define
+        tempVoc->flag = isExistVoc(historyfp, str);
+        strcpy(tempVoc->voc, str);
 
-        //define value
-        curVoc->flag = isExistVoc(history, str);
-        strcpy(curVoc->voc, str);
-
-        if(i == 0){
-            firstVoc = curVoc;
+        if(judge){
+            *headVoc = tempVoc;
+            judge = 0;
         }
         else
-            tailVoc->nextVoc = curVoc;
-        curVoc->nextVoc = NULL;
-        tailVoc = curVoc;
+            tailVoc->nextVoc = tempVoc;
+        tempVoc->nextVoc = NULL;
+        tailVoc = tempVoc;
     }
-    return firstVoc;
 }
 
 void searchVoc(char guessStr[], char resultStr[], Vocabulary **headVoc,
@@ -206,8 +169,8 @@ void lowerString(char str[]){
 void freeVoc(Vocabulary **headVoc, Vocabulary **curVoc, Vocabulary **tailVoc){
     *curVoc = *headVoc;
     while(*curVoc != NULL){
-        free( (*curVoc));
+        *tailVoc = *curVoc;
         *curVoc = (*curVoc)->nextVoc;
+        free(*tailVoc);
     }
-    free(*tailVoc);
 }
