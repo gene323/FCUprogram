@@ -49,6 +49,8 @@ int main(){
 
 
     freeVoc(&headVoc, &curVoc, &tailVoc);
+    fclose(history);
+    fclose(words);
     return 0;
 }//end main func
 
