@@ -1,7 +1,5 @@
-//D1051520 hw3 basic
-//Date 2022/03/22
-//D1051520 hw3 basic
-//Date 2022/03/22
+//D1051520 hw3 advance1
+//Date: 2022/03/23
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -10,6 +8,7 @@
 
 struct Vocabulary{
     bool flag;
+    int freqNum;
     char voc[6];
     struct Vocabulary *nextVoc;
 };
@@ -17,21 +16,27 @@ typedef struct Vocabulary Vocabulary;
 
 void openFile(FILE **fp, char *path);
 bool isExistVoc(FILE *historyfp, char str[]);
-void fillVoc(FILE *historyfp, FILE *wordsfp, Vocabulary **headVoc);
+void fillVoc(FILE *historyfp, FILE *wordsfp, FILE *frequencyfp, Vocabulary **headVoc);
 void lowerString(char str[]);
 void printVoc(Vocabulary *headVoc, Vocabulary *curVoc);
-void searchVoc(char*, char* , Vocabulary *, Vocabulary *, Vocabulary *);
+void searchVoc(char*, char*, Vocabulary *, Vocabulary *, Vocabulary *);
 void freeVoc(Vocabulary **headVoc, Vocabulary **curVoc, Vocabulary **tailVoc);
+void sortVoc(Vocabulary *headVoc);
+void greenLetter(char*, char*, int i , Vocabulary*, Vocabulary*);
+void blackLetter(char*, char* ,int i, Vocabulary*, Vocabulary*);
+void yellowLetter(char*, char*, int i, Vocabulary*, Vocabulary*);
 
 int main(){
 
-    FILE *history, *words;
+    FILE *history, *words, *frequency;
     openFile(&history, "history.txt");
     openFile(&words, "words.txt");
+    openFile(&frequency, "frequency.txt");
 
     Vocabulary *headVoc, *curVoc, *tailVoc;
 
-    fillVoc(history,words, &headVoc);
+    fillVoc(history, words, frequency, &headVoc);
+    sortVoc(headVoc);
     printVoc(headVoc, curVoc);
 
     char guessStr[6];
@@ -52,6 +57,7 @@ int main(){
     freeVoc(&headVoc, &curVoc, &tailVoc);
     fclose(history);
     fclose(words);
+    fclose(frequency);
     return 0;
 }//end main func
 
@@ -76,18 +82,22 @@ bool isExistVoc(FILE *historyfp, char str[]){
     return false;
 }//end isExistVoc func
 
-void fillVoc(FILE *historyfp, FILE *wordsfp, Vocabulary **headVoc){
+void fillVoc(FILE *historyfp, FILE *wordsfp, FILE *frequencyfp, Vocabulary **headVoc){
 
     fseek(wordsfp, 0, SEEK_SET);
+    fseek(frequencyfp, 0, SEEK_SET);
     Vocabulary *tempVoc, *tailVoc;
     char str[6];
+    char freqStr[10];
     bool judge = 1;
     while(fscanf(wordsfp, "%s", str) != EOF){
+        fscanf(frequencyfp, "%*s %s", freqStr);
         tempVoc = (Vocabulary*) malloc(sizeof(Vocabulary));
 
-        //define
+        //assign value
         tempVoc->flag = isExistVoc(historyfp, str);
         strcpy(tempVoc->voc, str);
+        tempVoc->freqNum = atoi(freqStr);
 
         if(judge){
             *headVoc = tempVoc;
@@ -99,7 +109,6 @@ void fillVoc(FILE *historyfp, FILE *wordsfp, Vocabulary **headVoc){
         tailVoc = tempVoc;
     }
 }
-
 void greenLetter(char guessStr[], char resultStr[], int i, Vocabulary *headVoc, Vocabulary *curVoc){
     curVoc = headVoc;
     char targetStr[6];
@@ -111,7 +120,6 @@ void greenLetter(char guessStr[], char resultStr[], int i, Vocabulary *headVoc, 
         (curVoc) = (curVoc)->nextVoc;
     }
 }
-
 void blackLetter(char guessStr[], char resultStr[], int i,
         Vocabulary *headVoc, Vocabulary *curVoc){
     curVoc = headVoc;
@@ -128,7 +136,6 @@ void blackLetter(char guessStr[], char resultStr[], int i,
     }
 
 }
-
 void yellowLetter(char guessStr[], char resultStr[], int i, Vocabulary *headVoc, Vocabulary *curVoc){
     curVoc = headVoc;
     char targetStr[6];
@@ -146,7 +153,6 @@ void yellowLetter(char guessStr[], char resultStr[], int i, Vocabulary *headVoc,
         }
         (curVoc) = (curVoc)->nextVoc;
     }
-
 }
 
 void searchVoc
@@ -181,8 +187,8 @@ void printVoc(Vocabulary *headVoc, Vocabulary *curVoc){
         curVoc = (curVoc)->nextVoc;
     }
     printf("\n\nThe above are all possible answers\n");
+    printf("\nAnd the first word is more possible than others\n");
 }
-
 void lowerString(char str[]){
     int len = strlen(str);
     for(int i=0; i<len; i++)
@@ -198,3 +204,33 @@ void freeVoc(Vocabulary **headVoc, Vocabulary **curVoc, Vocabulary **tailVoc){
     }
 }
 
+void sortVoc(Vocabulary *headVoc){
+    bool isSwap = 0;
+    Vocabulary *ptr1;
+    Vocabulary *ptr2 = NULL;
+
+    if(headVoc == NULL){ return; }
+
+    do{
+        isSwap = 0;
+        ptr1 = headVoc;
+
+        while(ptr1->nextVoc != ptr2){
+            if(ptr1->freqNum < ptr1->nextVoc->freqNum){
+                int tempNum = ptr1->freqNum;
+                char tempStr[6];
+                strcpy(tempStr, ptr1->voc);
+
+                ptr1->freqNum = ptr1->nextVoc->freqNum;
+                strcpy(ptr1->voc, ptr1->nextVoc->voc);
+
+                ptr1->nextVoc->freqNum = tempNum;
+                strcpy(ptr1->nextVoc->voc, tempStr);
+
+                isSwap = 1;
+            }
+            ptr1 = ptr1->nextVoc;
+        }
+        ptr2 = ptr1;
+    }while(isSwap);
+}
