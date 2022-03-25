@@ -22,9 +22,6 @@ void printVoc(Vocabulary *headVoc, Vocabulary *curVoc);
 void searchVoc(char*, char*, Vocabulary *, Vocabulary *, Vocabulary *);
 void freeVoc(Vocabulary **headVoc, Vocabulary **curVoc, Vocabulary **tailVoc);
 void sortVoc(Vocabulary *headVoc);
-void greenLetter(char*, char*, int i , Vocabulary*, Vocabulary*);
-void blackLetter(char*, char* ,int i, Vocabulary*, Vocabulary*);
-void yellowLetter(char*, char*, int i, Vocabulary*, Vocabulary*);
 
 int main(){
 
@@ -157,6 +154,10 @@ void yellowLetter(char guessStr[], char resultStr[], int i, Vocabulary *headVoc,
 
 void searchVoc
 (char guessStr[], char resultStr[], Vocabulary *headVoc, Vocabulary *curVoc, Vocabulary *tailVoc){
+
+    void greenLetter(char*, char*, int i , Vocabulary*, Vocabulary*);
+    void blackLetter(char*, char* ,int i, Vocabulary*, Vocabulary*);
+    void yellowLetter(char*, char*, int i, Vocabulary*, Vocabulary*);
 
     void (*func[3])(char*, char*, int, Vocabulary*, Vocabulary*)
     = {greenLetter, blackLetter, yellowLetter};
