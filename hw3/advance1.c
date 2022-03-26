@@ -61,10 +61,10 @@ int main(){
 void openFile(FILE **fp, char *path){
     if((*fp = fopen(path, "r")) == NULL){
         printf("The %s file can not open", path);
+        puts("");
+        return ;
     }
-    else{
-        printf("The %s file open successfully", path);
-    }
+    printf("The %s file open successfully", path);
     puts("");
 }//end openFile func
 
