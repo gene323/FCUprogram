@@ -121,9 +121,15 @@ void blackLetter(char guessStr[], char resultStr[], int i,
     while(curVoc != NULL){
         strcpy(targetStr, (curVoc)->voc);
         for(int j=0; j<5; j++){
-            if(guessStr[i] == targetStr[j] && resultStr[j] != 'g'){
-                (curVoc)->flag = 1;
-                break;
+            if(guessStr[i] == targetStr[j] && resultStr[j] != 'g' && curVoc->flag == 0){
+                for(int k=0; k<5; k++){
+                    if(guessStr[k] == targetStr[j] && resultStr[k] == 'y'){
+                        curVoc->flag = 0;
+                        break;
+                    }
+                    else
+                        curVoc->flag = 1;
+                }
             }
         }
         curVoc = (curVoc)->nextVoc;
@@ -139,8 +145,9 @@ void yellowLetter(char guessStr[], char resultStr[], int i, Vocabulary *headVoc,
         for(int j=0; j<5; j++){
             if(guessStr[i] == targetStr[j] && i != j){
                 judge = false;
-                break;
             }
+            if(guessStr[i] == targetStr[j] && i == j)
+                (curVoc)->flag = 1;
         }
         if(judge){
             (curVoc)->flag = 1;
