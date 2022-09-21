@@ -27,8 +27,8 @@ public class BitwiseOperation{
         System.out.printf("%25s", "right shift 3 bits of A: ");
         printBinary(a >> 3);
 
-        System.out.printf("%25s", "right shift 3 bits of B: ");
-        printBinary(b >> 3);
+        System.out.printf("%25s", "left shift 3 bits of B: ");
+        printBinary(b << 3);
 
         sc.close();
     }
