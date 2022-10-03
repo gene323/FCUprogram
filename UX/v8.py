@@ -1,5 +1,12 @@
 #!/usr/bin/python3
-print("Please input weight and height, press \"-9\" to stop")
+def red():
+    print("\033[31m", end='');
+def reset():
+    print("\033[0m", end='');
+def green():
+    print("\033[32m", end='');
+
+print("\nPlease input weight and height, press \"-9\" to stop")
 bmis = {}
 
 while True:
@@ -38,7 +45,6 @@ while True:
 normal, over_w, under_w = {}, {}, {}
 
 for k,v in bmis.items():
-# print ('The BMI of {} is {}'.format(k, v))
     if (v>= 24):
         over_w[k] = v
     elif (v<= 18.5):
@@ -46,16 +52,21 @@ for k,v in bmis.items():
     else:
         normal[k] = v
 
-    if (not over_w and not under_w):
-        print ('Every one is good!!')
+print('======================')
+print('normal');
+for k,v in normal.items():
+    print('The BMI of {} is {}'.format(k, v))
 
-    if (over_w):
-        print ('Overweight people, please Exercise ⚽️⚽️!')
+if(over_w):
+    red()
+    print('over weight')
 for k,v in over_w.items():
-    print ('The BMI of {} is {} '.format(k,v))
-    print ()
+    print('The BMI of {} is {}'.format(k,v))
 
-if (under_w):
-    print ('Under weight people, please Eat more 🍖🍖!')
+if(under_w):
+    green()
+    print('under weight')
 for k,v in under_w.items():
-    print ('The BMI of {} is {} '.format(k,v))
+    print('The BMI of {} is {}'.format(k,v))
+
+reset();
