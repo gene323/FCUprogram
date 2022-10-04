@@ -34,18 +34,21 @@ int main(int argc, char **argv){
     for(int k=0; k<50000; k++){
         int num = rand() % 8;
         //determine whether collide the border
-        while(bug[0] + dir[num][0] < 0 ||
-            bug[0] + dir[num][0] >= N ||
-            bug[1] + dir[num][1] < 0 ||
-            bug[1] + dir[num][1] >= M){
+        while(bug[0] + dir[num][0] < 0
+            || bug[0] + dir[num][0] >= N
+            || bug[1] + dir[num][1] < 0
+            || bug[1] + dir[num][1] >= M){
 
             num = rand() % 8;
         }
+
         bug[0] += dir[num][0];
         bug[1] += dir[num][1];
         move++;
+
         if(count[bug[0]][bug[1]] == 0)
             grid--;
+
         count[bug[0]][bug[1]] += 1;
 
         //represents all the grids are walked
@@ -53,6 +56,7 @@ int main(int argc, char **argv){
             break;
     }
 
+    //print to .csv file
     fprintf(file, "The total number of moves = %d\n", move);
     for(int i=0; i<N; i++){
         for(int j=0; j<M; j++){
