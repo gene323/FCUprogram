@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class drawFiguresRhombus{
+public class DrawFiguresRhombus{
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter the side of a rhombus (between 3 and 29): ");

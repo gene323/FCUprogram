@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class rationalNumber{
+public class RationalNumber{
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         System.out.print("a = ");

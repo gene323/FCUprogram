@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class drawTree{
+public class DrawTree{
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter the number of tiers (2 to 5): ");

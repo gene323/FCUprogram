@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class drawFiguresSquare{
+public class DrawFiguresSquare{
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter the side of a square (between 2 and 30): ");

@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.Scanner;
 
-public class hello{
+public class Hello{
     public static void main(String[] args){
         try{
             File obj = new File("./0913.txt");

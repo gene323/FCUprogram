@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class drawFiguresTriangle{
+public class DrawFiguresTriangle{
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter the side of an isosceles triangle "
