@@ -80,16 +80,16 @@ void requeue(int id){
 }
 
 //print all information to debug
-void show(){
-    printf("%d ", globalTime);
+void show(char *action){
+    printf("%4d  %-15s", globalTime, action);
     for(int i=0; i<totalTeller; i++){
         Customer *q = teller[i].front;
-        printf("%d", i);
+        printf("%d ", teller[i].status);
         while(q != NULL){
             printf("%s ", q->name);
             q = q->next;
         }
-        printf("   ");
+        printf("                         ");
     }
     puts("");
 }
@@ -117,52 +117,80 @@ int main(){
 
     while(fscanf(inputFile, "%s %d %d", name, &arrTime, &serTime) != EOF){
         while(globalTime < arrTime){
+            globalTime++;
             for(int i=0; i<totalTeller; i++){
-                if(teller[i].count && teller[i].leftTime == 0 && teller[i].front != NULL){
-                    fprintf(outputFile, "%s %d %d\n", teller[i].front->name, globalTime, i);
-                    pop(i);
-                    if(teller[i].front != NULL)
-                        teller[i].leftTime = teller[i].front->serTime - 1;
-                }
-                else if(teller[i].count && teller[i].leftTime && teller[i].front != NULL){
+                //if there has customer in queue 
+                if(teller[i].count && teller[i].leftTime && teller[i].front != NULL){
                     teller[i].leftTime--;
                 }
+                if(teller[i].count && teller[i].leftTime == 0 && teller[i].front != NULL){
+                    fprintf(outputFile, "%s %d %d\n", teller[i].front->name, globalTime, i);
+                    /*debug
+                    char action[30];
+                    sprintf(action, "%s quit", teller[i].front->name);
+                    */
+                    pop(i);
+                    /*
+                    show(action);
+                    */
+                    if(teller[i].front != NULL)
+                        teller[i].leftTime = teller[i].front->serTime;
+                }
             }
-            globalTime++;
         }
         if(strcmp(name, "#") == 0){
             teller[serTime].status = 1;
+            /*debug
+            char action[30];
+            sprintf(action, "close %d", serTime);
+            show(action);
+            */
             requeue(serTime);
         }
         else if(strcmp(name, "@") == 0){
             teller[serTime].status = 2;
-            teller[serTime].count = 0;
-            teller[serTime].leftTime = 0;
+            /*debug
+            char action[30];
+            sprintf(action, "open %d", serTime);
+            show(action);
+            */
         }
         else{
             push(name, arrTime, serTime);
+            /*debug
+            char action[30];
+            sprintf(action, "%s in queue", name);
+            show(action);
+            */
         }
     }
 
     //the rest of queue
     while(globalTime){
         int flag = 1;
+        globalTime++;
         for(int i=0; i<totalTeller; i++){
+            if(teller[i].count && teller[i].leftTime && teller[i].front != NULL){
+                flag = 0;
+                teller[i].leftTime--;
+            }
             if(teller[i].count && teller[i].leftTime == 0 && teller[i].front != NULL){
                 flag = 0;
                 fprintf(outputFile, "%s %d %d\n", teller[i].front->name, globalTime, i);
+                /*debug
+                char action[30];
+                sprintf(action, "%s quit", teller[i].front->name);
+                */
                 pop(i);
+                /*
+                show(action);
+                */
                 if(teller[i].count && teller[i].front != NULL)
-                    teller[i].leftTime = teller[i].front->serTime - 1;
-            }
-            else if(teller[i].count && teller[i].leftTime && teller[i].front != NULL){
-                flag = 0;
-                teller[i].leftTime--;
+                    teller[i].leftTime = teller[i].front->serTime;
             }
         }
         if(flag)
             break;
-        globalTime++;
     }
     fclose(inputFile);
     fclose(outputFile);
