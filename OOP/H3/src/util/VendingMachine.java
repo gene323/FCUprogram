@@ -1,4 +1,4 @@
-package VendingMachine.util;
+package util;
 import java.util.ArrayList;
 
 public class VendingMachine{
@@ -21,15 +21,15 @@ public class VendingMachine{
     }
 
     public static class Product{
-        protected String productName;
+        protected String name;
         protected double price;
         public Product(String name, double price){
-            this.productName = name;
+            this.name = name;
             this.price = price;
         }
 
         public String getProdcutName(){
-            return productName;
+            return name;
         }
         public double getPrice(){
             return price;

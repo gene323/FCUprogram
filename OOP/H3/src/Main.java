@@ -1,5 +1,4 @@
-package VendingMachine;
-import VendingMachine.util.VendingMachine;
+import util.VendingMachine;
 
 public class Main{
     public static void main(String[] args){
