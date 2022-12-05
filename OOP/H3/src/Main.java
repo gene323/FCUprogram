@@ -6,8 +6,8 @@ public class Main{
         Scanner sc = new Scanner(System.in);
         VendingMachine vendingMachine = new VendingMachine();
 
-        char op = '1';
-        while(op != 'e'){
+        char op;
+        do{
             System.out.print("a. Deposit bill(s) or coin(s),\n"
                             + "b. Select product(s),\n"
                             + "c. Cancel a product,\n"
@@ -53,7 +53,50 @@ public class Main{
                     }
                 } while(moneyType == 'B' || moneyType == 'C');
             }
-        }
+            else if(op == 'b'){
+                char productType;
+                System.out.println(vendingMachine);
+                do{
+                    System.out.print("enter product code, Q to quit\n> ");
+                    productType = sc.next().charAt(0);
+                    int i = 0;
+                    for(VendingMachine.Product p: vendingMachine.getShoppingCart()){
+                        if(productType == (char)i + 'A'){
+                            vendingMachine.select(p);
+                            break;
+                        }
+                        i++;
+                    }
+                }while(productType != 'Q');
+            }
+            else if(op == 'c'){
+                char productType;
+                System.out.println(vendingMachine.showShoppingCart());
+                do{
+                    System.out.print("enter product code, Q to quit\n> ");
+                    productType = sc.next().charAt(0);
+                    int i = 0;
+                    for(VendingMachine.Product p: vendingMachine.getShoppingCart()){
+                        if(productType == (char)i + 'A'){
+                            vendingMachine.cancel(p);
+                            break;
+                        }
+                        i++;
+                    }
+                }while(productType != 'Q');
+            }
+            else if(op == 'd'){
+                if(vendingMachine.getMoney() < vendingMachine.getPayment()){
+                    System.out.printf("\nInsufficient Deposit\n"
+                            + "Your money: %.3f, Payment: %.3f\n\n"
+                            , vendingMachine.getMoney(), vendingMachine.getPayment());
+                }
+                else{
+                    vendingMachine.purchase();
+                }
+            }
+
+        }while(op != 'e');
 
         sc.close();
     }
