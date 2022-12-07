@@ -27,7 +27,7 @@ void initializeHeap(Tree*);
 void minHeapify(Tree*, int);
 void sort(FILE* file, Tree* tree);
 void report(FILE* file);
-bool search(FILE*, Tree*, char*);
+void search(FILE*, Tree*, char*);
 bool isHeapEmpty(Tree*, char*);
 int countTreeHeight(Tree*);
 int countTreeNode(Tree*);
@@ -94,12 +94,12 @@ int main(int argc, char** argv){
     return 0;
 }
 
-bool search(FILE* file, Tree* tree, char key[]){
+void search(FILE* file, Tree* tree, char key[]){
     if(!tree){
         fprintf(file, "%s doesn't exist!\n", key);
         fprintf(file, "%s\n", DELIMITER);
         searchFailSum++;
-        return false;
+        return ;
     }
     if(strcmp(tree->productName, key) == 0){
         fprintf(file, "%s\n", key);
@@ -107,7 +107,7 @@ bool search(FILE* file, Tree* tree, char key[]){
             fprintf(file, "%s %d\n",tree->heap[i].name, tree->heap[i].price);
         }
         fprintf(file, "%s\n", DELIMITER);
-        return true;
+        return ;
     }
     if(strcmp(tree->productName, key) < 0){
         return search(file, tree->right, key);
