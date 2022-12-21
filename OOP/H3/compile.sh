@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROJECT_FOLDER="/home/gene/code/FCUprogram/OOP/H3"
+PROJECT_FOLDER="."
 SOURCE_FOLDER="$PROJECT_FOLDER/src"
 DEST_FOLDER="$PROJECT_FOLDER/bin"
 
