@@ -11,13 +11,12 @@ public class Fexam_D1051520_3_1 {
 	public static void main(String[] args) {
 		
 		Scanner in = new Scanner(System.in);
-		String path = "";  // Path of the image files.
+		String path = new File("").getAbsolutePath();// Path of the image files.
 		String sourName; // Source image file name.
 		String destName; // Copied image file name.
 		
 		System.out.print("Enter the source image file name: ");
         sourName = in.nextLine();
-        path = new File("").getAbsolutePath();
 		
 		System.out.print("Enter the copied image file name: ");
         destName = in.nextLine();
